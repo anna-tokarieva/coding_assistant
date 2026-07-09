@@ -90,27 +90,6 @@ class FileOperations(AbstractCapability[Any]):
         ctx.deps.console.print(f"[cyan]Calling tool:[/cyan] {call.tool_name}")
         return args
 
-class FileOperations(AbstractCapability[Any]):
-    """
-    Capability exposing basic file operations (read_file, write_file)
-    as tools the agent can call.
-    """
-
-    def get_toolset(self) -> AgentToolset[Any] | None:
-        return file_toolset
-
-    async def before_tool_execute(
-        self,
-        ctx: RunContext[AgentDeps],
-        *,
-        call: ToolCallPart,
-        tool_def: ToolDefinition,
-        args: dict[str, Any],
-    ) -> dict[str, Any]:
-        ctx.deps.console.print(f"[cyan]Calling tool:[/cyan] {call.tool_name}")
-        return args
-
-
 # NEW: ReasoningEffort capability (same indent as FileOperations, i.e. top level)
 class ReasoningEffort(AbstractCapability[Any]):
     """
@@ -133,7 +112,7 @@ class ReasoningEffort(AbstractCapability[Any]):
             else:
                 effort = "medium"
             
-            return ModelSettings(thinking=effort)
+            return ModelSettings(thinking={"effort": effort})
 
         return _set_reasoning_effort
 
@@ -142,7 +121,7 @@ class ReasoningEffort(AbstractCapability[Any]):
 agent = Agent(
     model = model,
     instructions = "You are a Python coding agent. Write clear, correct, and minimal Python code.",
-    capabilities = [FileOperations(), ReasoningEffort()],
+    capabilities = [FileOperations(), ReasoningEffort(), Skills()],
     deps_type=AgentDeps,
 )
 
