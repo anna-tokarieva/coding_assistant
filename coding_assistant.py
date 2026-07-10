@@ -112,7 +112,7 @@ class ReasoningEffort(AbstractCapability[Any]):
             else:
                 effort = "medium"
             
-            return ModelSettings(thinking={"effort": effort})
+            return ModelSettings(thinking=effort)
 
         return _set_reasoning_effort
 

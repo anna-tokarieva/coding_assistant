@@ -24,12 +24,35 @@ def load_skill(skill_name: str) -> str:
     skill = frontmatter.load(file_path)
     return skill.content
 
-
 @dataclass
 class Skills(AbstractCapability[Any]):
-    # 1. Override the get_instructions() method.
+    """
+    Capability that:
+      - tells the agent which skills exist (name + description)
+      - exposes a load_skill tool so the model can load them on demand
+    """
+
+    def get_instructions(self) -> str:
+        """Return a listing of available skills for the agent."""
+        skills_dir = Path("skills")
+        lines: list[str] = [
+            "You have access to the following skills. "
+            "Use them when they are relevant to the user's request:",
+            "",
+        ]
+
+        # For every *.md file in the skills directory
+        for path in sorted(skills_dir.glob("*.md")):
+            skill = frontmatter.load(path)
+            skill_id = path.stem  # filename without .md
+            name = skill.metadata.get("name", skill_id)
+            desc = skill.metadata.get("description", "No description provided.")
+            lines.append(f"- **{name}** (`{skill_id}`): {desc}")
+
+        return "\n".join(lines)
 
     def get_toolset(self) -> FunctionToolset:
+        """Expose the load_skill function as a tool."""
         toolset = FunctionToolset()
         toolset.add_function(load_skill)
 
