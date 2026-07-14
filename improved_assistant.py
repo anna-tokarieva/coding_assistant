@@ -235,7 +235,6 @@ class FileOperations(AbstractCapability[Any]):
     def get_toolset(self) -> AgentToolset[Any] | None:
         return file_toolset
 
-
 # Step 3: hook to log tool calls - for Exercise 4
     async def before_tool_execute(
         self,
@@ -273,7 +272,6 @@ class ReasoningEffort(AbstractCapability[Any]):
             return ModelSettings(thinking = effort)
 
         return _set_reasoning_effort
-
 
 # Step 4: Agent and g everything together
 agent = Agent(
@@ -324,10 +322,8 @@ async def main() -> None:
         
         message_history = result.all_messages()
 
-
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
         print("\nExiting...")
-
