@@ -1,2 +1,0 @@
-testing/simple_math.py
-testing/test_agent.txt

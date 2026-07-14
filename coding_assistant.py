@@ -164,7 +164,6 @@ class ReasoningEffort(AbstractCapability[Any]):
 
         return _set_reasoning_effort
 
-
 # Step 4: Agent and g everything together
 agent = Agent(
     model = model,
@@ -201,10 +200,8 @@ async def main() -> None:
         
         message_history = result.all_messages()
 
-
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
         print("\nExiting...")
-

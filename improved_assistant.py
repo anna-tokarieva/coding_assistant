@@ -8,7 +8,6 @@ from typing import Any, Callable
 from dataclasses import dataclass
 import subprocess
 import os
-ROOT_DIR = Path(__file__).parent.resolve()  # The coding_assistant folder
 
 #-------standard library imports: general python features, used across all exercises
 from os import getenv # function that reads API_KEY
