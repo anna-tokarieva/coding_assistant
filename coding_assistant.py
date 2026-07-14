@@ -3,6 +3,7 @@ from os import getenv # function that reads API_KEY
 import asyncio #framework to wait for OpenAI/OpenRouter response and don’t block everything else
 from typing import Any, Callable #read any type, call a function onn a value
 from dataclasses import dataclass #create classes to store data, creates __init__, etc
+from pathlib import Path  # working with filesystem paths for search/delete tools
 
 #-------third-party imports: libraries installed via pip
 from dotenv import load_dotenv #load .env into the environment
@@ -70,9 +71,50 @@ def write_file(path: str, content: str) -> str:
         our_file.write(content)
     return f"Wrote {len(content)} characters to '{path}'."
 
+def search_files(pattern: str, root: str = ".") -> list[str]:
+    """
+    Search for files matching a glob pattern under a root directory.
+
+    Parameters:
+        pattern:
+            A glob-style pattern like "*.py", "tests/test_*.py", or "**/*.md".
+        root:
+            Root directory to search from. Defaults to the current directory ".".
+
+    Returns:
+        A sorted list of matching file paths as strings.
+    """
+    base = Path(root)
+    matches = [str(path) for path in base.rglob(pattern)]
+    return sorted(matches)
+
+def delete_file(path: str) -> str:
+    """
+    Delete a file from disk.
+
+    Parameters:
+        path:
+            Path to the file to delete.
+
+    Returns:
+        A short confirmation or error message.
+    """
+    p = Path(path)
+
+    if not p.exists():
+        return f"No file found at '{path}'."
+
+    if p.is_dir():
+        return f"'{path}' is a directory, not a file. Refusing to delete."
+
+    p.unlink()
+    return f"Deleted '{path}'."
+
 # registering the functions on file_toolset - exersice 3
 file_toolset.add_function(read_file)
 file_toolset.add_function(write_file)
+file_toolset.add_function(search_files)
+file_toolset.add_function(delete_file)
 
 class FileOperations(AbstractCapability[Any]):
     """

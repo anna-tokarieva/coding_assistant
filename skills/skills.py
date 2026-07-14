@@ -1,10 +1,10 @@
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Any
+from dataclasses import dataclass #create classes to store data, creates __init__, etc
+from pathlib import Path #working with file paths
+from typing import Any #read any type, call a function on a value
 
-import frontmatter
-from pydantic_ai.capabilities import AbstractCapability
-from pydantic_ai.toolsets import FunctionToolset
+import frontmatter #reads Markdown files with metadata
+from pydantic_ai.capabilities import AbstractCapability #defining capabilities of our agent
+from pydantic_ai.toolsets import FunctionToolset #Toolset for adding Python functions as tools
 
 
 def load_skill(skill_name: str) -> str:
